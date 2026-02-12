@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import ValueSelectorProps from '../../props/ValueSelectorProps';
 
-
 const ValueSelector: FC<ValueSelectorProps> = ({ values }) => {
 
     return (<div className='valueselector-block'>

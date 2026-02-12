@@ -1,5 +1,3 @@
-
-
 interface ValueSelectorProps {
     name: string,
     values?: string[]

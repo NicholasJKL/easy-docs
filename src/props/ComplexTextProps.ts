@@ -1,5 +1,3 @@
-
-
 interface ComplexTextProps {
     name: string,
     value?: string,

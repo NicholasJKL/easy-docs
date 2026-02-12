@@ -1,7 +1,6 @@
 import React, { ChangeEvent, FC, useState } from 'react';
 import ComplexTextProps from '../../props/ComplexTextProps';
 
-
 const ComplexText: FC<ComplexTextProps> = ({ restraints }) => {
 
     const [value, setValue] = useState<string>('');
