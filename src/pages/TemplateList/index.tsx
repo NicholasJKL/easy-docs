@@ -1,21 +1,32 @@
-import React, { FC } from 'react';
+import React, { FC, MouseEventHandler } from 'react';
 import { Search } from '@mui/icons-material';
+import { useNavigate } from 'react-router';
 import TemplateListItem from './TemplateListItem';
 
 const TemplateList: FC = () => {
+
+    const navigate = useNavigate();
+
     return (
-        <main>
-            <div className='template-list'>
-                <h2>Список шаблонов</h2>
-                <div className='template-list-search'>
+        <div className='template-list'>
+            <div className='template-list-search'>
+            <h2>Список шаблонов</h2>
+                <div className='search-field'>
                     <input type="text" /><Search />
                 </div>
-                <div className='template-list-container'>
-                    <TemplateListItem></TemplateListItem>
-                    <TemplateListItem></TemplateListItem>
-                </div>
             </div>
-        </main>
+            <div className='template-list-container'>
+                <TemplateListItem onClick={() => navigate('/template')}></TemplateListItem>
+                <TemplateListItem onClick={() => navigate('/template')}></TemplateListItem>
+                <TemplateListItem onClick={() => navigate('/template')}></TemplateListItem>
+                <TemplateListItem onClick={() => navigate('/template')}></TemplateListItem>
+                <TemplateListItem onClick={() => navigate('/template')}></TemplateListItem>
+                <TemplateListItem onClick={() => navigate('/template')}></TemplateListItem>
+                <TemplateListItem onClick={() => navigate('/template')}></TemplateListItem>
+                <TemplateListItem onClick={() => navigate('/template')}></TemplateListItem>
+                <TemplateListItem onClick={() => navigate('/template')}></TemplateListItem>
+            </div>
+        </div>
     );
 }
 

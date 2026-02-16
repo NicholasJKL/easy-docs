@@ -14,7 +14,6 @@ const ComplexText: FC<ComplexTextProps> = ({ restraints }) => {
             <input type="text"
                 value={value}
                 onChange={handleChange}/>
-
             {restraints.test(value) ? <p>true</p> : <p>false</p>}
         </div>);
 }

@@ -1,14 +1,19 @@
 import React, { FC } from 'react';
 import ValueSelectorProps from '../../props/ValueSelectorProps';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
-const ValueSelector: FC<ValueSelectorProps> = ({ values }) => {
+const ValueSelector: FC<ValueSelectorProps> = ({ name, values }) => {
 
-    return (<div className='valueselector-block'>
-        <select name="" id="">
-            <option value="">--Выберите значение--</option>
-            {values?.map((value) => <option value={value}>{value}</option>)}
-        </select>
-    </div>);
+    return (<FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">{name}</InputLabel>
+        <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label={name}
+        >
+            {values?.map((value) => <MenuItem value={value}>{value}</MenuItem>)}
+        </Select>
+    </FormControl>);
 }
 
 export default ValueSelector;

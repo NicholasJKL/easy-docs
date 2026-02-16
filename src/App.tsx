@@ -1,19 +1,20 @@
 import React from 'react';
-import logo from './logo.svg';
-
+import { Routes, Route } from 'react-router'
 import Header from './components/Header';
 import TemplateList from './pages/TemplateList';
+import TemplateFill from './pages/TemplateFill';
 
 
 function App() {
     return (
         <>
-            <Header/>
-
+            <Header />
             <main>
-                <TemplateList></TemplateList>
+                <Routes>
+                    <Route path="/" element={<TemplateList/>} />
+                    <Route path="/template" element={<TemplateFill/>}/>
+                </Routes>
             </main>
-            
         </>
     );
 }
