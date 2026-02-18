@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
+import { TextField } from '@mui/material';
 import SimpleTextProps from '../../props/SimpleTextProps';
 
 const SimpleText: FC<SimpleTextProps> = () => 
     {
-        return <div className='simpletext-block'></div>;
+        return <TextField id="standard-basic" variant="standard"/>;
     }
 
 export default SimpleText;

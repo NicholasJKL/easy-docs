@@ -1,31 +1,43 @@
 import React, { FC } from 'react';
-import { Button } from '@mui/material'
 import CircularWithValueLabel from './CircularProgressWithLabel';
-import ValueSelector from './ValueSelector';
-import Date from './Date';
+import { Controller, useForm } from 'react-hook-form';
+import SimpleText from './SimpleText';
+import { TextField } from '@mui/material';
 
 const TemplateFill: FC = () => {
 
-    return (<main className='template-fill'>
-        <div className='template-info'>
-            <p>Прогресс заполнения</p>
-            <div>
-                <CircularWithValueLabel></CircularWithValueLabel>
+    const { control, handleSubmit } = useForm();
+
+    return (
+        <main className='template-fill'>
+            <div className='template-info'>
+                <p>Прогресс заполнения</p>
+                <div>
+                    <CircularWithValueLabel></CircularWithValueLabel>
+                </div>
             </div>
-        </div>
 
-        <form className='template-form'>
-            <h2>Документ на практику "СТАНКИН"</h2>
-            <ValueSelector name={'Вид практической подготовки'} 
-            values={["Учебная практика", "Производственная практика", "Преддипломная практика"]}/>
+            <form className='template-form' onSubmit={handleSubmit((data) => console.log(data))}>
+                <h2>Документ на практику "СТАНКИН"</h2>
+                <Controller
+                    name="email"
+                    control={control}
+                    rules={{ required: 'Email обязателен' }}
+                    
+                    render={({ field, fieldState }) => (
+                        <TextField
+                            {...field}
+                            label="Email"
+                            error={!!fieldState.error}
+                            helperText={fieldState.error?.message}
+                        />
+                    )}
+                />
+                <button type="submit">Отправить</button>
+            </form>
 
-            <p>Срок организации практической подготовки (с/по)</p>
-            <Date name='Дата'/>
-            <Date name='Дата'/>
-            <Button variant="contained" disabled>Готово</Button>
-        </form>
-
-    </main>);
+        </main>
+    );
 }
 
 
