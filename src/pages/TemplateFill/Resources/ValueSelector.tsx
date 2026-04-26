@@ -7,6 +7,7 @@ interface ValueSelectorProps<T extends FieldValues> {
     control: Control<T>;
     label: string;
     values: string[];
+    helperText?: string;
     valueSelectorProps?: Partial<SelectProps>;
 }
 
@@ -15,6 +16,7 @@ const ValueSelector = <T extends FieldValues>({
     control,
     label,
     values,
+    helperText,
     valueSelectorProps }: ValueSelectorProps<T>): JSX.Element => (
     <Controller
         name={name}
@@ -30,7 +32,7 @@ const ValueSelector = <T extends FieldValues>({
                     defaultValue={''}>
                     {values?.map((value) => <MenuItem value={value}>{value}</MenuItem>)}
                 </Select>
-                <FormHelperText>{fieldState.error?.message}</FormHelperText>
+                <FormHelperText>{helperText ?? fieldState.error?.message ??  ''}</FormHelperText>
             </FormControl>)}
     />
 );

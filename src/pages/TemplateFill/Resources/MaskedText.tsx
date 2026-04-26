@@ -1,9 +1,9 @@
 import { JSX, forwardRef } from 'react';
 import { Controller, Control, FieldValues, Path } from 'react-hook-form';
 import { TextField, TextFieldProps } from '@mui/material';
-import { IMaskInput } from 'react-imask';
+import { IMaskInput, IMask } from 'react-imask';
 
-interface PhoneMaskProps {
+interface MaskProps {
     onChange: (event: { target: { name: string; value: string } }) => void;
     name: string;
 }
@@ -12,7 +12,8 @@ interface MaskFieldProps<T extends FieldValues> {
     name: Path<T>;
     control: Control<T>;
     label: string;
-    mask: string;
+    mask: string | RegExp;
+    helperText?: string;
     textFieldProps?: Partial<TextFieldProps>;
 }
 
@@ -21,20 +22,23 @@ const MaskedText = <T extends FieldValues>({
     control,
     label,
     mask,
-    textFieldProps}: MaskFieldProps<T>): JSX.Element => {
+    helperText,
+    textFieldProps }: MaskFieldProps<T>): JSX.Element => {
 
-    const PhoneMask = forwardRef<HTMLInputElement, PhoneMaskProps>(
-        function PhoneMask(props, ref) {
+    const iMask = IMask.createMask(mask);
+
+    const MaskInput = forwardRef<HTMLInputElement, MaskProps>(
+        function Mask(props, ref) {
             const { onChange, ...other } = props;
             return (
                 <IMaskInput
                     {...other}
-                    mask={mask}
-                    radix="."
+                    mask={iMask}
+                    prepare={(str: string) => str.toUpperCase()}
                     inputRef={ref}
+                    lazy={false}
                     onAccept={(value) => {
-                        const raw = value.replace(/\D/g, '');
-                        onChange({ target: { name: props.name, value: raw } });
+                        onChange({ target: { name: props.name, value: value } });
                     }}
                     overwrite
                 />
@@ -54,11 +58,11 @@ const MaskedText = <T extends FieldValues>({
                     fullWidth
                     slotProps={{
                         input: {
-                            inputComponent: PhoneMask as any,
+                            inputComponent: MaskInput as any,
                         }
                     }}
                     error={!!fieldState.error}
-                    helperText={fieldState.error?.message}
+                    helperText={helperText ?? fieldState.error?.message}
                 />
             )}
         />

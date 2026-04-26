@@ -3,7 +3,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ruRU } from '@mui/x-date-pickers/locales';
 import { FieldValues, Path, Control, Field, Controller } from 'react-hook-form';
-import { DatePickerProps, DateValidationError } from '@mui/x-date-pickers';
+import { DatePickerProps } from '@mui/x-date-pickers';
 import 'dayjs/locale/ru';
 
 interface DateProps<T extends FieldValues> {

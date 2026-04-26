@@ -6,6 +6,7 @@ interface SimpleTextProps<T extends FieldValues> {
     name: Path<T>;
     control: Control<T>;
     label: string;
+    helperText?: string;
     textFieldProps?: Partial<TextFieldProps>;
 }
 
@@ -13,6 +14,7 @@ const SimpleText = <T extends FieldValues>({
     name,
     control,
     label,
+    helperText,
     textFieldProps,
 }: SimpleTextProps<T>): JSX.Element => (
     <Controller
@@ -25,7 +27,7 @@ const SimpleText = <T extends FieldValues>({
                 label={label}
                 fullWidth
                 error={!!fieldState.error}
-                helperText={fieldState.error?.message}
+                helperText={helperText ?? fieldState.error?.message}
             />
         )}
     />
