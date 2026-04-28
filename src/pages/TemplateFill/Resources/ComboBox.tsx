@@ -1,13 +1,13 @@
 import { JSX } from 'react';
 import { Controller, Control, FieldValues, Path } from 'react-hook-form';
-import { Autocomplete, AutocompleteProps, TextField } from '@mui/material';
+import { Autocomplete, TextField } from '@mui/material';
 
 interface ComboBoxProps<T extends FieldValues> {
     name: Path<T>;
     control: Control<T>;
     label: string;
     values: string[];
-    textFieldProps?: Partial<AutocompleteProps<any, false, false, false>>;
+    textFieldProps?: Partial<React.ComponentProps<typeof Autocomplete>>;
 }
 
 const ComboBox = <T extends FieldValues>({
@@ -22,16 +22,21 @@ const ComboBox = <T extends FieldValues>({
         control={control}
         render={({ field, fieldState }) => (
             <Autocomplete
-                {...field}
                 {...textFieldProps}
+                {...field}
                 options={values}
+                onChange={(_e, newValue) => {
+                    field.onChange(newValue ?? '');
+                }}
                 fullWidth
-                renderInput={(params) => <TextField
-                    {...params}
-                    label={label}
-                    error={!!fieldState.error}
-                    helperText={fieldState.error?.message}
-                />}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label={label}
+                        error={!!fieldState.error}
+                        helperText={fieldState.error?.message}
+                    />
+                )}
             />
         )}
     />

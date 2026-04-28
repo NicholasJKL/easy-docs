@@ -1,8 +1,7 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import CircularWithValueLabel from './Resources/CircularProgressWithLabel';
-import { Controller, useForm } from 'react-hook-form';
-import { TextField, Button } from '@mui/material';
+import { useForm } from 'react-hook-form';
+import { Button } from '@mui/material';
 import * as yup from 'yup';
 
 import SimpleText from './Resources/SimpleText';
@@ -32,35 +31,45 @@ yup.setLocale({
 const schema = yup.object({
     email: yup.string().email().required(),
     practiceType: yup.string().oneOf(staticData.practiceTypeValues, "Некорректное значение").required(),
-    dateStart: yup.date().min(new Date('2026-04-20')).required(),
-    dateEnd: yup.date().required(),
+    dateStart: yup.date().required(),
+    dateEnd: yup.date().required().test('is-after-start', 'Дата окончания должна быть позже даты начала', function (value) {
+        const { dateStart } = this.parent;
+        if (!dateStart || !value) return true;
+        return value > dateStart;
+    }),
     studentName: yup.string().required(),
     phoneNumber: yup.string().matches(staticData.phoneRegExp, "Некорректный номер телефона").required(),
-    group: yup.string().required(), // добавить регекс
+    group: yup.string().matches(/^[A-Z]{3}-\d{2}-\d{2}$/, "Некорректное значение").required(),
     course: yup.string().oneOf(staticData.courseValues, "Некорректное значение").required(),
     fieldOfStudy: yup.string().oneOf(staticData.fieldOfStudyValues, "Некорректное значение").required(),
     cafedra: yup.string().oneOf(staticData.cafedraValues, "Некорректное значение").required(),
     managerName: yup.string().required(),
-    managerPost: yup.string().oneOf(staticData.postValues).required(),
+    managerPost: yup.string().oneOf(staticData.managerPostValues).required(),
     organizationName: yup.string().required(),
     infoOrganizationChoice: yup.string().oneOf(staticData.infoOrganizationChoice, "Некорректное значение").required(),
     address: yup.string().matches(/^[^/]+\/.+$/, "Должно быть два адреса с разделителем /").required(),
     organizationOGRN_INN: yup.string().matches(/^\d{13}\/\d{10}$/, "Формат - ОГРН/ИНН").required(),
+    organization_KPP: yup.string().optional().default("").matches(/^(|\d{9})$/),
+    organizationPhoneNumber: yup.string().matches(staticData.phoneRegExp, "Некорректный номер телефона").required(),
+    organizationEmail: yup.string().email().required(),
+    directorPost: yup.string().oneOf(staticData.directorPostValues).required(),
+    directorName: yup.string().required(),
+    directorBase: yup.string().oneOf(staticData.directorBaseValues).required(),
+    orgManagerName: yup.string().required(),
+    orgManagerPost: yup.string().required()
 });
+
 
 const TemplateFill: FC = () => {
 
     const { control, handleSubmit } = useForm({
-        resolver: yupResolver(schema)
+        resolver: yupResolver(schema),
     });
 
     return (
         <main className='template-fill'>
             <div className='template-info'>
-                <p>Прогресс заполнения</p>
-                <div>
-                    {/*<CircularWithValueLabel></CircularWithValueLabel>*/}
-                </div>
+
             </div>
             <form className='template-form' onSubmit={handleSubmit((data) => console.log(data))}>
                 <h2>Документ на практику "СТАНКИН"</h2>
@@ -73,7 +82,8 @@ const TemplateFill: FC = () => {
                     name='phoneNumber'
                     control={control}
                     label='Телефон'
-                    mask='+7 (000) 000-00-00' />
+                    mask='+7 (000) 000-00-00'
+                />
                 <SimpleText name='email' control={control} label='Email' />
                 <ValueSelector name='course' control={control} label='Курс' values={staticData.courseValues}></ValueSelector>
                 <MaskedText
@@ -86,7 +96,7 @@ const TemplateFill: FC = () => {
                 <ComboBox name='cafedra' control={control} label='Кафедра' values={staticData.cafedraValues}></ComboBox>
                 <h3>Информация о руководителе практической подготовки от Университета</h3>
                 <SimpleText name='managerName' control={control} label='ФИО' />
-                <ValueSelector name='managerPost' control={control} label='Должность' values={staticData.postValues} />
+                <ValueSelector name='managerPost' control={control} label='Должность' values={staticData.managerPostValues} />
                 <h3>Информация о Профильной организации</h3>
                 <SimpleText name='organizationName' control={control} label='Полное наименование (сокращённое наименование)' />
                 <ValueSelector
@@ -99,7 +109,7 @@ const TemplateFill: FC = () => {
                 <SimpleText
                     name='address'
                     control={control}
-                    label='Адрес организации'
+                    label='Адрес'
                     helperText={'Юридический адрес (с индексом) / Фактический адрес (с индексом, помещением). Разделитель "/" обязателен'}
                 />
                 <h4>Реквизиты организации можно посмотреть
@@ -115,6 +125,34 @@ const TemplateFill: FC = () => {
                     label='ОГРН/ИНН'
                     mask='0000000000000/0000000000'
                 />
+                <MaskedText
+                    name='organization_KPP'
+                    control={control}
+                    label='КПП'
+                    mask='000000000'
+                    unmasked
+                    helperText='Если организация является ИП - не указывать'
+                />
+                <MaskedText
+                    name='organizationPhoneNumber'
+                    control={control}
+                    label='Телефон'
+                    mask='+7 (000) 000-00-00'
+                />
+                <SimpleText name='organizationEmail' control={control} label='Email' />
+                <h3>Информация о руководителе Профильной организации</h3>
+                <ValueSelector name='directorPost' control={control} label='Должность' values={staticData.directorPostValues} />
+                <SimpleText name='directorName' control={control} label='ФИО' />
+                <ValueSelector
+                    name='directorBase'
+                    control={control}
+                    label='Действует на основании'
+                    values={staticData.directorBaseValues}
+                    helperText='Только генеральный директор может действовать на основании устава'
+                />
+                <h3>Информация о руководителе практической подготовки от Профильной организации</h3>
+                <SimpleText name='orgManagerName' control={control} label='ФИО' />
+                <SimpleText name='orgManagerPost' control={control} label='Должность' />
 
                 <Button
                     type="submit"

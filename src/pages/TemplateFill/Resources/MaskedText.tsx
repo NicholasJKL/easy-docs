@@ -13,6 +13,7 @@ interface MaskFieldProps<T extends FieldValues> {
     control: Control<T>;
     label: string;
     mask: string | RegExp;
+    unmasked?: boolean
     helperText?: string;
     textFieldProps?: Partial<TextFieldProps>;
 }
@@ -23,6 +24,7 @@ const MaskedText = <T extends FieldValues>({
     label,
     mask,
     helperText,
+    unmasked,
     textFieldProps }: MaskFieldProps<T>): JSX.Element => {
 
     const iMask = IMask.createMask(mask);
@@ -37,8 +39,8 @@ const MaskedText = <T extends FieldValues>({
                     prepare={(str: string) => str.toUpperCase()}
                     inputRef={ref}
                     lazy={false}
-                    onAccept={(value) => {
-                        onChange({ target: { name: props.name, value: value } });
+                    onAccept={(value, maskRef) => {
+                        onChange({ target: { name: props.name, value: unmasked ? maskRef.unmaskedValue : value } });
                     }}
                     overwrite
                 />
@@ -59,6 +61,9 @@ const MaskedText = <T extends FieldValues>({
                     slotProps={{
                         input: {
                             inputComponent: MaskInput as any,
+                        },
+                        inputLabel: {
+                            shrink: true
                         }
                     }}
                     error={!!fieldState.error}

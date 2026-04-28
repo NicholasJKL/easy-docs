@@ -28,8 +28,8 @@ const SimpleText = <T extends FieldValues>({
                 fullWidth
                 error={!!fieldState.error}
                 helperText={helperText ?? fieldState.error?.message}
-            />
-        )}
+            />)
+        }
     />
 );
 
