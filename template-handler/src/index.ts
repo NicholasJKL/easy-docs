@@ -1,13 +1,18 @@
-import { FillTemplate } from "./TemplateService.js";
+import express from 'express';
+import { setupSwagger } from './swagger';
+import router from './routes';
+import e from 'express';
 
+var PORT = 3000;
 
-const testData = {
-    "имя": "Александр",
-    "возраст": "28 лет",
-    "город": "Москва",
-    "должность": "Разработчик"
-};
+const app = express();
 
-const data: string = JSON.stringify(testData);
+app.use(express.json());
 
-FillTemplate(1, data);
+app.use(router);
+
+setupSwagger(app);
+
+app.listen(PORT, () => {
+    console.log(`Сервер запущен на порту ${PORT} - http://localhost:3000/api-docs`);
+});

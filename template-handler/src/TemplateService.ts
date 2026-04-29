@@ -6,25 +6,25 @@ const LoadTemplate = (templateId: number): Buffer => {
     return fs.readFileSync(templateId + ".docx");
 }
 
-const CreatePatchesObject = (values: string): Record<string, IPatch> => {
+const CreatePatchesObject = (fieldsWithValuesObject: object): Record<string, IPatch> => {
 
-    const fillValues: Map<string, string> = new Map(Object.entries(JSON.parse(values)));
+    const fieldsWithValues = Object.entries(fieldsWithValuesObject);
     const patchesObject: Record<string, IPatch> = {};
 
-    fillValues.forEach((value: string, key: string) => {
+    fieldsWithValues.forEach(([key, value]) => {
         patchesObject[key] = {
             type: PatchType.PARAGRAPH,
-            children: [new TextRun(value)]
+            children: [new TextRun(value.toString())]
         };
     });
 
     return patchesObject;
 }
 
-export const FillTemplate = (templateId: number, values: string): void => {
+export const FillTemplate = (templateId: number, formData: object): void => {
 
     const template = LoadTemplate(templateId);
-    const patchesObject: Record<string, IPatch> = CreatePatchesObject(values);
+    const patchesObject: Record<string, IPatch> = CreatePatchesObject(formData);
 
     patchDocument({
         outputType: "nodebuffer",
