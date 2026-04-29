@@ -32,7 +32,7 @@ const ValueSelector = <T extends FieldValues>({
                     defaultValue={''}>
                     {values?.map((value) => <MenuItem value={value}>{value}</MenuItem>)}
                 </Select>
-                <FormHelperText>{helperText ?? fieldState.error?.message ??  ''}</FormHelperText>
+                <FormHelperText>{helperText ?? fieldState.error?.message ?? ''}</FormHelperText>
             </FormControl>)}
     />
 );

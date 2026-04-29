@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { Button } from '@mui/material';
+import dayjs from 'dayjs';
 import * as yup from 'yup';
 
 import SimpleText from './Resources/SimpleText';
@@ -31,8 +32,8 @@ yup.setLocale({
 const schema = yup.object({
     email: yup.string().email().required(),
     practiceType: yup.string().oneOf(staticData.practiceTypeValues, "Некорректное значение").required(),
-    dateStart: yup.date().required(),
-    dateEnd: yup.date().required().test('is-after-start', 'Дата окончания должна быть позже даты начала', function (value) {
+    dateStart: yup.date().required().nullable(),
+    dateEnd: yup.date().required().nullable().test('is-after-start', 'Дата окончания должна быть позже даты начала', function (value) {
         const { dateStart } = this.parent;
         if (!dateStart || !value) return true;
         return value > dateStart;
@@ -59,11 +60,39 @@ const schema = yup.object({
     orgManagerPost: yup.string().required()
 });
 
+const validMock = {
+    email: 'test@example.com',
+    practiceType: staticData.practiceTypeValues[0],
+    dateStart: null,
+    dateEnd: null,
+    studentName: 'Иванов Иван Иванович',
+    phoneNumber: '+7 (123) 456-78-90',
+    group: 'ABC-12-34',
+    course: staticData.courseValues[0],
+    fieldOfStudy: staticData.fieldOfStudyValues[0],
+    cafedra: staticData.cafedraValues[0],
+    managerName: 'Петров П.П.',
+    managerPost: staticData.managerPostValues[0],
+    organizationName: 'ООО "Ромашка"',
+    infoOrganizationChoice: staticData.infoOrganizationChoice[0],
+    address: 'Москва, ул. Ленина, д.1 / Москва, ул. Ленина, д.1, офис 5',
+    organizationOGRN_INN: '1234567890123/1234567890',
+    organization_KPP: '123456789',
+    organizationPhoneNumber: '+7 (987) 654-32-10',
+    organizationEmail: 'org@example.com',
+    directorPost: staticData.directorPostValues[0],
+    directorName: 'Сидоров С.С.',
+    directorBase: staticData.directorBaseValues[0],
+    orgManagerName: 'Кузнецов К.К.',
+    orgManagerPost: 'Главный инженер',
+};
+
 
 const TemplateFill: FC = () => {
 
     const { control, handleSubmit } = useForm({
         resolver: yupResolver(schema),
+        defaultValues: validMock
     });
 
     return (
@@ -74,8 +103,8 @@ const TemplateFill: FC = () => {
             <form className='template-form' onSubmit={handleSubmit((data) => console.log(data))}>
                 <h2>Документ на практику "СТАНКИН"</h2>
                 <ValueSelector name='practiceType' control={control} label='Вид практики' values={staticData.practiceTypeValues}></ValueSelector>
-                <DateCalendar name='dateStart' control={control} label='Дата начала практики'></DateCalendar>
-                <DateCalendar name='dateEnd' control={control} label='Дата окончания практики'></DateCalendar>
+                <DateCalendar name='dateStart' control={control} label='Дата начала практики' minDate={dayjs('2025-01-01')} maxDate={dayjs('2026-12-31')}></DateCalendar>
+                <DateCalendar name='dateEnd' control={control} label='Дата окончания практики' minDate={dayjs('2025-01-01')} maxDate={dayjs('2026-12-31')}></DateCalendar>
                 <h3>Информация об обучающемся</h3>
                 <SimpleText name='studentName' control={control} label='ФИО' />
                 <MaskedText
