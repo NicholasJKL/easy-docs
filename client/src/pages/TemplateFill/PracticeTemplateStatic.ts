@@ -6,7 +6,7 @@ type PracticeTemplateStatic =
         fieldOfStudyValues: string[],
         cafedraValues: string[],
         managerPostValues: string[],
-        infoOrganizationChoice: string[],
+        infoOrgChoice: string[],
         directorPostValues: string[],
         directorBaseValues: string[]
     }
@@ -28,7 +28,7 @@ const staticData: PracticeTemplateStatic =
         'прикладной математики',
         'управления и информатики в технических системах'],
     managerPostValues: ['ассистент', 'преподаватель', 'старший преподаватель', 'доцент', 'профессор', 'заведующий кафедрой'],
-    infoOrganizationChoice: ['САМОСТОЯТЕЛЬНО', 'ПО МЕСТУ РАБОТЫ', 'ЦЕЛЕВИК', 'ПО ПОТРЕБНОСТИ'],
+    infoOrgChoice: ['САМОСТОЯТЕЛЬНО', 'ПО МЕСТУ РАБОТЫ', 'ЦЕЛЕВИК', 'ПО ПОТРЕБНОСТИ'],
     directorPostValues: ['генеральный директор', 'заместитель генерального директора', 'директор по персоналу'],
     directorBaseValues: ['устава', 'доверенности']
 

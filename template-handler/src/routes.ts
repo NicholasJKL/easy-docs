@@ -6,7 +6,7 @@ const templateController = new TemplateController();
 
 /**
  * @swagger
- * /templates/generate:
+ * /api/generatedocument:
  *   post:
  *     summary: Генерация документа на основе шаблона и переданных данных
  *     description: Принимает идентификатор шаблона и объект с данными для заполнения. Возвращает сгенерированный документ (в текущей заглушке – JSON с сообщением).
@@ -35,20 +35,17 @@ const templateController = new TemplateController();
  *                   должность: "Разработчик"
  *     responses:
  *       200:
- *         description: Успешная генерация документа (в текущей версии – заглушка)
+ *         description: Успешная генерация документа
  *         content:
- *           application/json:
+ *           application/vnd.openxmlformats-officedocument.wordprocessingml.document:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Генерация документа (заглушка)"
+ *               type: string
+ *               format: binary
  *       400:
  *         description: Неверный запрос (отсутствуют обязательные поля)
  *       500:
  *         description: Внутренняя ошибка сервера
  */
-router.post('/templates/generate', templateController.generateDocument);
+router.post('/generatedocument', templateController.generateDocument);
 
 export default router;

@@ -30,7 +30,7 @@ const DateCalendar = <T extends FieldValues>({
             <DatePicker
                 {...field}
                 {...datePickerProps}
-                defaultValue={null}
+                defaultValue={undefined}
                 label={label}
                 minDate={minDate ?? undefined}
                 maxDate={maxDate ?? undefined}

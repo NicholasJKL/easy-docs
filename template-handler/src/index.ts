@@ -1,18 +1,23 @@
 import express from 'express';
 import { setupSwagger } from './swagger';
 import router from './routes';
-import e from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
 
-var PORT = 3000;
+dotenv.config();
+
+const port = process.env.PORT || 3000;
 
 const app = express();
 
 app.use(express.json());
 
-app.use(router);
+app.use(cors({ origin: 'http://localhost:3000' }));
+
+app.use('/api', router);
 
 setupSwagger(app);
 
-app.listen(PORT, () => {
-    console.log(`Сервер запущен на порту ${PORT} - http://localhost:3000/api-docs`);
+app.listen(port, () => {
+    console.log(`Сервер запущен на порту ${port} - http://localhost:${port}/api-docs`);
 });

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { FillTemplate } from './TemplateService';
+import { fillTemplate } from './TemplateService';
 
 interface TemplateData {
     templateId: number;
@@ -11,9 +11,13 @@ export class TemplateController {
     async generateDocument(req: Request, res: Response): Promise<void> {
         try {
             const templateData: TemplateData = req.body;
-            await FillTemplate(templateData.templateId, templateData.formData);
 
-            res.status(200).json({ message: 'Генерация документа (заглушка)' });
+            const file: Buffer = await fillTemplate(templateData.templateId, templateData.formData);
+
+            res.setHeader('Content-Disposition', 'attachment; filename="document.docx"');
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+            res.status(200).send(file);
+
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'Ошибка при генерации документа' });

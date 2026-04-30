@@ -1,36 +1,53 @@
 import * as fs from "fs";
-import { patchDocument, PatchType, TextRun, type IPatch } from "docx";
+import { patchDocument, PatchType, TextRun, type IPatch } from "docx"; import { log } from "console";
+;
 
-
-const LoadTemplate = (templateId: number): Buffer => {
+const loadTemplate = (templateId: number): Buffer => {
     return fs.readFileSync(templateId + ".docx");
 }
 
-const CreatePatchesObject = (fieldsWithValuesObject: object): Record<string, IPatch> => {
+const createPatchesObject = (fieldsWithValuesObject: object): Record<string, IPatch> => {
 
-    const fieldsWithValues = Object.entries(fieldsWithValuesObject);
+    const processed: Record<string, any> = { ...fieldsWithValuesObject };
+
+    for (const [key, value] of Object.entries(processed)) {
+        if (key.toLowerCase().includes('date')) {
+            try {
+                const date = new Date(value);
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                processed[key] = `${day}.${month}.${year}`;
+
+            } catch { }
+        }
+    }
+
     const patchesObject: Record<string, IPatch> = {};
-
-    fieldsWithValues.forEach(([key, value]) => {
+    for (const [key, value] of Object.entries(processed)) {
         patchesObject[key] = {
             type: PatchType.PARAGRAPH,
-            children: [new TextRun(value.toString())]
+            children: [new TextRun(String(value ?? ''))],
         };
-    });
+    }
 
     return patchesObject;
 }
 
-export const FillTemplate = (templateId: number, formData: object): void => {
+export const fillTemplate = async (templateId: number, formData: object): Promise<Buffer> => {
 
-    const template = LoadTemplate(templateId);
-    const patchesObject: Record<string, IPatch> = CreatePatchesObject(formData);
+    const template = loadTemplate(templateId);
+    const patchesObject: Record<string, IPatch> = createPatchesObject(formData);
 
-    patchDocument({
-        outputType: "nodebuffer",
-        data: template,
-        patches: patchesObject
-    }).then((doc) => {
-        fs.writeFileSync("My Document.docx", doc);
-    });
+    try {
+        const doc = await patchDocument({
+            outputType: "nodebuffer",
+            data: template,
+            patches: patchesObject
+        });
+        return doc;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Ошибка при заполнении шаблона');
+    }
 }

@@ -1,12 +1,52 @@
-import React, { FC, MouseEventHandler } from 'react';
+import { FC, MouseEventHandler } from 'react';
+import {
+    Card,
+    CardActionArea,
+    CardContent,
+    Typography,
+    Box,
+} from '@mui/material';
+import { Description } from '@mui/icons-material';
 
-const TemplateListItem: FC<{onClick: MouseEventHandler<HTMLDivElement>}> = ({onClick}) => 
-    {
-        return (
-        <div className='template-list-item' onClick={onClick} >
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur rem voluptatibus optio repudiandae. Qui, iusto, quis dolore ab asperiores harum placeat reprehenderit sapiente accusamus ducimus veniam corporis facilis perspiciatis accusantium.</p>
-        </div>
-        );
-    }
+interface TemplateListItemProps {
+    onClick: MouseEventHandler<HTMLDivElement>;
+    title?: string;
+    description?: string;
+}
+
+const TemplateListItem: FC<TemplateListItemProps> = ({
+    onClick,
+    title = "Заявка на практику МГТУ Станкин",
+    description = "Возможно прохождение практики по месту работы. Можно найти место практики из перечня организаций, которые предоставили потребность в проведении практики или Вы можете самостоятельно найти организацию, с которой у Вас есть договоренность.",
+}) => {
+    return (
+        <Card
+            sx={{
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                transition: 'transform 0.2s, box-shadow 0.2s',
+                '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: 6,
+                },
+            }}
+        >
+            <CardActionArea sx={{ flexGrow: 1 }}>
+                <CardContent onClick={onClick}>
+                    <Box display="flex" alignItems="center" mb={1}>
+                        <Description color="primary" sx={{ mr: 1 }} />
+                        <Typography variant="h6" lineHeight="normal">
+                            {title}
+                        </Typography>
+                    </Box>
+                    <Typography variant="body2" color="text.secondary">
+                        {description}
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
+        </Card>
+    );
+};
 
 export default TemplateListItem;

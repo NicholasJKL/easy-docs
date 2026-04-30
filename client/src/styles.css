@@ -23,6 +23,7 @@ body {
     text-rendering: optimizeLegibility;
 }
 
+/*Старые стили
 header {
     height: 96px;
     display: flex;
@@ -130,3 +131,5 @@ nav {
     gap: 16px;
     max-width: 512px;
 }
+
+*/
