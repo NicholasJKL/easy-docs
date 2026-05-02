@@ -1,6 +1,5 @@
 type PracticeTemplateStatic =
     {
-        phoneRegExp: RegExp,
         practiceTypeValues: string[],
         courseValues: string[],
         fieldOfStudyValues: string[],
@@ -13,7 +12,6 @@ type PracticeTemplateStatic =
 
 const staticData: PracticeTemplateStatic =
 {
-    phoneRegExp: /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/,
     practiceTypeValues: ['Учебная', 'Производственная', 'Научно-исследовательская', 'Преддипломная'],
     courseValues: ['1', '2', '3', '4', '5', '6'],
     fieldOfStudyValues: ['09.03.01 Информатика и вычислительная техника',

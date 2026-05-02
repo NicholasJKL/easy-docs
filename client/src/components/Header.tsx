@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useNavigate } from 'react-router';
 import { EditDocument } from '@mui/icons-material';
 import {
     AppBar,
@@ -16,6 +17,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 const Header: FC = () => {
     const theme = useTheme();
+    const navigate = useNavigate();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -28,8 +30,8 @@ const Header: FC = () => {
 
     return (
         <AppBar position="static" color="primary" sx={{ mb: 4 }}>
-            <Toolbar>
-                <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+            <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={() => navigate('/')}>
                     <EditDocument sx={{ mr: 1 }} />
                     <Typography variant="h6" component="h1" sx={{ fontWeight: 500 }}>
                         EasyDocs
@@ -38,7 +40,7 @@ const Header: FC = () => {
 
                 {!isMobile && (
                     <Box sx={{ display: 'flex', gap: 2 }}>
-                        <Button color="inherit" sx={{ textTransform: 'none' }}>
+                        <Button color="inherit" sx={{ textTransform: 'none' }} onClick={() => navigate('/')}>
                             Список шаблонов
                         </Button>
                         <Button
@@ -67,7 +69,11 @@ const Header: FC = () => {
                             open={Boolean(anchorEl)}
                             onClose={handleMenuClose}
                         >
-                            <MenuItem onClick={handleMenuClose}>Список шаблонов</MenuItem>
+                            <MenuItem onClick={() => {
+                                handleMenuClose();
+                                navigate('/');
+                            }}
+                            >Список шаблонов</MenuItem>
                             <MenuItem onClick={handleMenuClose}>Регистрация</MenuItem>
                         </Menu>
                     </>

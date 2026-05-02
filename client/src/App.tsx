@@ -3,10 +3,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ruRU } from '@mui/x-date-pickers/locales';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 import Header from './components/Header';
 import TemplateList from './pages/TemplateList';
+import Practice from './pages/TemplateFill/PracticeTemplate';
 import TemplateFill from './pages/TemplateFill';
+import TemplateConstructor from './pages/TemplateConstructor';
 
 const theme = createTheme({
     components: {
@@ -16,15 +19,7 @@ const theme = createTheme({
             }
         }
     },
-    palette: {
-        mode: 'light',
-        primary: {
-            main: '#4758b8',
-        },
-        secondary: {
-            main: '#8dfff9',
-        },
-    }
+   
 });
 
 const russianLocale = ruRU.components.MuiLocalizationProvider.defaultProps.localeText;
@@ -33,11 +28,14 @@ function App() {
     return (
         <ThemeProvider theme={theme}>
             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='ru' localeText={russianLocale}>
+                <CssBaseline />
                 <Header />
                 <main>
                     <Routes>
                         <Route path="/" element={<TemplateList />} />
                         <Route path="/template" element={<TemplateFill />} />
+                        <Route path="/constructor" element={<TemplateConstructor />} />
+                        <Route path="/template/test" element={<Practice />} />
                     </Routes>
                 </main>
             </LocalizationProvider>

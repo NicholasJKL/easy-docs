@@ -1,6 +1,5 @@
 import * as fs from "fs";
-import { patchDocument, PatchType, TextRun, type IPatch } from "docx"; import { log } from "console";
-;
+import { patchDocument, PatchType, TextRun, type IPatch } from "docx";
 
 const loadTemplate = (templateId: number): Buffer => {
     return fs.readFileSync(templateId + ".docx");

@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-  ]
+, "../template-handler/src/models/Template.ts"  ]
 }
