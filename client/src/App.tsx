@@ -19,7 +19,7 @@ const theme = createTheme({
             }
         }
     },
-   
+
 });
 
 const russianLocale = ruRU.components.MuiLocalizationProvider.defaultProps.localeText;
@@ -33,9 +33,9 @@ function App() {
                 <main>
                     <Routes>
                         <Route path="/" element={<TemplateList />} />
-                        <Route path="/template" element={<TemplateFill />} />
                         <Route path="/constructor" element={<TemplateConstructor />} />
-                        <Route path="/template/test" element={<Practice />} />
+                        <Route path="/template/:id" element={<TemplateFill />} />
+                        <Route path="/template/practice" element={<Practice />} />
                     </Routes>
                 </main>
             </LocalizationProvider>

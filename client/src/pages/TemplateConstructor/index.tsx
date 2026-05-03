@@ -6,13 +6,9 @@ import {
     TextField,
     Button,
     Box,
-    Select,
-    MenuItem,
     IconButton,
     Paper,
     Stack,
-    FormControl,
-    InputLabel,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -58,28 +54,36 @@ const TemplateConstructor: FC = () => {
     };
 
     const onSubmit = async (data: FormData) => {
-        console.log(data, file);
         setLoading(true);
-        
-        const arrayBuffer = await file?.arrayBuffer();
-
         try {
+            const formData = new FormData();
+            
+            formData.append('name', data.name);
+            formData.append('description', data.description);
+            
+            formData.append('fields', JSON.stringify(data.fields));
+            
+            if (file) {
+                formData.append('templateFile', file);
+            }
+
             const response = await fetch('http://localhost:3001/api/templates', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...data, file: arrayBuffer }),
+                body: formData,
             });
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.error || 'Ошибка генерации');
+                throw new Error(errorData.error || 'Ошибка создания шаблона');
             }
+
+            alert('Шаблон успешно сохранён!');
         } catch (err) {
             console.error(err);
             alert('Ошибка при отправке формы');
+        } finally {
+            setLoading(false);
         }
-
-        setLoading(false);
     };
 
     return (

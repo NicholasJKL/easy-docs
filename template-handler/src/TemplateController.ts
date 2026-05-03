@@ -18,11 +18,12 @@ class TemplateController {
     async generateDocument(req: Request, res: Response): Promise<void> {
         try {
             const templateData: TemplateFillData = req.body;
-            const file: Buffer = await fillTemplate(templateData.templateId, templateData.formData);
+            const file: Buffer = await this.templateRepository.getTemplateFileById(templateData.templateId);
+            const filledFile: Buffer = await fillTemplate(file, templateData.formData);
 
             res.setHeader('Content-Disposition', 'attachment; filename="document.docx"');
             res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-            res.status(200).send(file);
+            res.status(200).send(filledFile);
 
         } catch (error) {
             console.error(error);
@@ -40,12 +41,64 @@ class TemplateController {
         }
     }
 
+    async getTemplateById(req: Request, res: Response): Promise<void> {
+        try {
+            const idParam = req.params.id;
+            if (!idParam) {
+                res.status(400).json({ error: 'ID шаблона не указан' });
+                return;
+            }
+
+            const id = Number(idParam);
+            if (isNaN(id)) {
+                res.status(400).json({ error: 'ID должен быть числом' });
+                return;
+            }
+
+            const template: Template = await this.templateRepository.getTemplateById(id);
+
+            if (!template) {
+                res.status(404).json({ error: 'Шаблон не найден' });
+                return;
+            }
+            res.status(200).json(template);
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Ошибка получения списка шаблонов' });
+        }
+    }
+
     async createTemplate(req: Request, res: Response): Promise<void> {
         try {
-            const template: Template = req.body;
-            console.log(template);
-            const result = await this.templateRepository.createTemplate(template);
+            const { name, description, fields } = req.body;
+            let parsedFields = [];
 
+            try {
+                parsedFields = fields ? JSON.parse(fields) : [];
+            } catch (e) {
+                res.status(400).json({ error: 'Поле fields должно быть валидным JSON' });
+                return;
+            }
+
+            const file = req.file;
+            if (!file) {
+                res.status(400).json({ error: 'Файл шаблона (.docx) обязателен' });
+                return;
+            }
+            const fileBuffer = file.buffer;
+
+            const template = {
+                name,
+                description: description || null,
+                fields: parsedFields,
+                static_data: {},
+                validation_scheme: {},
+                file: fileBuffer,
+                author_id: null,
+            };
+
+            const result = await this.templateRepository.createTemplate(template);
             res.status(200).json(result);
         } catch (error) {
             console.error(error);

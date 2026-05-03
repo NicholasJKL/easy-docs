@@ -68,7 +68,7 @@ const schema = yup.object({
     orgManagerName: yup.string().required(),
     orgManagerPost: yup.string().required()
 });
-/*
+
 const validMock = {
     email: 'test@example.com',
     practiceType: staticData.practiceTypeValues[0],
@@ -97,16 +97,45 @@ const validMock = {
     orgManagerName: 'Кузнецов К.К.',
     orgManagerPost: 'Главный инженер',
 };
-*/
-export type FormData = yup.InferType<typeof schema>;
+
+const defaultValues = {
+    practiceType: '',
+    dateStart: null,
+    dateEnd: null,
+    studentName: '',
+    phoneNumber: '',
+    email: '',
+    course: '',
+    group: '',
+    fieldOfStudy: '',
+    cafedra: '',
+    managerName: '',
+    managerPost: '',
+    orgName: '',
+    infoOrgChoice: '',
+    addressJuridical: '',
+    addressFactical: '',
+    orgOGRN: '',
+    orgINN: '',
+    orgKPP: '',
+    orgPhoneNumber: '',
+    orgEmail: '',
+    directorPost: '',
+    directorName: '',
+    directorBase: '',
+    orgManagerName: '',
+    orgManagerPost: '',
+};
+
+type FormData = yup.InferType<typeof schema>;
 
 const TemplateFill: FC = () => {
 
     const [isLoading, setLoading] = useState<boolean>(false);
 
-    const { control, handleSubmit } = useForm({
+    const { control, handleSubmit, formState: { errors } } = useForm<any>({
         resolver: yupResolver(schema),
-        //defaultValues: validMock
+        defaultValues: validMock
     });
 
     const onSubmit = async (data: FormData) => {
@@ -117,7 +146,7 @@ const TemplateFill: FC = () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    templateId: 2,
+                    templateId: 0,
                     formData: data,
                 }),
             });
@@ -213,13 +242,13 @@ const TemplateFill: FC = () => {
                         <MaskedText
                             name='orgOGRN'
                             control={control}
-                            label='ОГРН/ИНН'
+                            label='ОГРН'
                             mask='0000000000000'
                         />
                         <MaskedText
                             name='orgINN'
                             control={control}
-                            label='ОГРН/ИНН'
+                            label='ИНН'
                             mask='0000000000'
                         />
                         <MaskedText
@@ -250,12 +279,20 @@ const TemplateFill: FC = () => {
                         <Typography variant="h5">Информация о руководителе практической подготовки от Профильной организации</Typography>
                         <SimpleText name='orgManagerName' control={control} label='ФИО' />
                         <SimpleText name='orgManagerPost' control={control} label='Должность' />
-
-                        <Button
-                            type="submit"
-                            variant='contained'
-                            loading={isLoading}
-                        >Отправить</Button>
+                        <Box display="flex" flexDirection="column">
+                            <Button
+                                type="submit"
+                                variant='contained'
+                                disabled={Object.keys(errors).length > 0}
+                                loading={isLoading}
+                                sx={{alignSelf: "flex-end" }}
+                            >Отправить</Button>
+                            {Object.keys(errors).length > 0 && (
+                                <Typography color="error" variant="body2" sx={{ mt: 0, textAlign: "right" }}>
+                                    Пожалуйста, исправьте ошибки в форме
+                                </Typography>
+                            )}
+                        </Box>
                     </Stack>
                 </form>
             </Paper>

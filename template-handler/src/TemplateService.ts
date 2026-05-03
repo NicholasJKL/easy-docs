@@ -1,9 +1,4 @@
-import * as fs from "fs";
 import { patchDocument, PatchType, TextRun, type IPatch } from "docx";
-
-const loadTemplate = (templateId: number): Buffer => {
-    return fs.readFileSync(templateId + ".docx");
-}
 
 const createPatchesObject = (fieldsWithValuesObject: object): Record<string, IPatch> => {
 
@@ -33,15 +28,14 @@ const createPatchesObject = (fieldsWithValuesObject: object): Record<string, IPa
     return patchesObject;
 }
 
-export const fillTemplate = async (templateId: number, formData: object): Promise<Buffer> => {
+export const fillTemplate = async (templateFile: Buffer, formData: object): Promise<Buffer> => {
 
-    const template = loadTemplate(templateId);
     const patchesObject: Record<string, IPatch> = createPatchesObject(formData);
 
     try {
         const doc = await patchDocument({
             outputType: "nodebuffer",
-            data: template,
+            data: templateFile,
             patches: patchesObject
         });
         return doc;

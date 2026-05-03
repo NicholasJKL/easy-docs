@@ -20,7 +20,7 @@ const TemplateListItem: FC<TemplateListItemProps> = ({
     description = "Возможно прохождение практики по месту работы. Можно найти место практики из перечня организаций, которые предоставили потребность в проведении практики или Вы можете самостоятельно найти организацию, с которой у Вас есть договоренность.",
 }) => {
     return (
-        <Card
+        <Card onClick={onClick}
             sx={{
                 height: '100%',
                 display: 'flex',
@@ -32,11 +32,17 @@ const TemplateListItem: FC<TemplateListItemProps> = ({
                 },
             }}
         >
-            <CardActionArea sx={{ flexGrow: 1 }}>
-                <CardContent onClick={onClick}>
-                    <Box display="flex" alignItems="center" mb={1}>
+            <CardActionArea
+                sx={{
+                    flexGrow: 1,
+                    display: 'flex',
+                    alignItems: 'flex-start'
+                }}
+            >
+                <CardContent sx={{ width: '100%' }}>
+                    <Box display="flex" mb={1}>
                         <Description color="primary" sx={{ mr: 1 }} />
-                        <Typography variant="h6" lineHeight="normal">
+                        <Typography variant="h6" lineHeight="1.2" minHeight="2.4em" overflow="hidden" textOverflow="ellipsis">
                             {title}
                         </Typography>
                     </Box>

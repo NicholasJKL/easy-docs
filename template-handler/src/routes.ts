@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { Pool } from 'pg';
+import multer from 'multer';
+
 import TemplateController from './TemplateController';
 
 const pool = new Pool({
@@ -7,6 +9,9 @@ const pool = new Pool({
 });
 
 const router = Router();
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
 const templateController = new TemplateController(pool);
 
 /**
@@ -88,48 +93,64 @@ router.get('/templates', templateController.getAllTemplates.bind(templateControl
  * @swagger
  * /api/templates:
  *   post:
- *     summary: Создать новый шаблон
- *     description: Принимает данные шаблона и сохраняет его в базе данных.
+ *     summary: Создать новый шаблон документа
+ *     description: |
+ *       Загружает файл шаблона (.docx) и метаданные для создания нового шаблона.
+ *       Данные полей формы (`fields`) передаются в виде JSON-строки.
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
  *               - name
  *               - fields
- *               - static_data
- *               - validation_scheme
- *               - file
+ *               - templateFile
  *             properties:
- *               author_id:
- *                 type: integer
- *                 description: ID автора шаблона (опционально)
- *                 nullable: true
  *               name:
  *                 type: string
  *                 description: Название шаблона
+ *                 example: "Договор аренды"
  *               description:
  *                 type: string
- *                 description: Описание шаблона
- *                 nullable: true
+ *                 description: Описание шаблона (необязательно)
+ *                 example: "Типовой договор аренды недвижимости"
  *               fields:
- *                 type: object
- *                 description: JSON-схема полей формы
- *               static_data:
- *                 type: object
- *                 description: Статические данные для полей (списки и т.п.)
- *               validation_scheme:
- *                 type: object
- *                 description: Схема валидации Yup в формате JSON
- *               file:
  *                 type: string
- *                 format: base64
- *                 description: Шаблон документа (DOCX) в кодировке base64
+ *                 description: JSON-строка с массивом полей формы
+ *                 example: '[{"label":"ФИО клиента","type":"text"},{"label":"Дата","type":"date"}]'
+ *               templateFile:
+ *                 type: string
+ *                 format: binary
+ *                 description: Файл шаблона документа (.docx)
  *     responses:
  *       200:
  *         description: Шаблон успешно создан
+ *       400:
+ *         description: Неверный запрос (отсутствует файл или поля)
+ *       500:
+ *         description: Ошибка сервера
+ */
+router.post('/templates', upload.single('templateFile'), templateController.createTemplate.bind(templateController));
+
+/**
+ * @swagger
+ * /api/template/{id}:
+ *   get:
+ *     summary: Получить шаблон по идентификатору
+ *     description: Возвращает информацию о шаблоне (включая поля, статические данные, схему валидации)
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Уникальный идентификатор шаблона
+ *         example: 1
+ *     responses:
+ *       200:
+ *         description: Успешный ответ
  *         content:
  *           application/json:
  *             schema:
@@ -137,7 +158,6 @@ router.get('/templates', templateController.getAllTemplates.bind(templateControl
  *               properties:
  *                 id:
  *                   type: integer
- *                   example: 10
  *                 author_id:
  *                   type: integer
  *                   nullable: true
@@ -148,16 +168,20 @@ router.get('/templates', templateController.getAllTemplates.bind(templateControl
  *                   nullable: true
  *                 fields:
  *                   type: object
+ *                   description: JSON-схема полей формы
  *                 static_data:
  *                   type: object
+ *                   description: Статические данные для полей
  *                 validation_scheme:
  *                   type: object
+ *                   description: Схема валидации
  *                 file:
  *                   type: string
- *                   format: base64
+ *                   format: byte
+ *                   description: Бинарные данные файла
  *       500:
  *         description: Ошибка сервера
  */
-router.post('/templates', templateController.createTemplate.bind(templateController));
+router.get('/template/:id', templateController.getTemplateById.bind(templateController));
 
 export default router;

@@ -29,7 +29,7 @@ const Header: FC = () => {
     };
 
     return (
-        <AppBar position="static" color="primary" sx={{ mb: 4 }}>
+        <AppBar position="static" color="primary" sx={{ mb: 2 }}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={() => navigate('/')}>
                     <EditDocument sx={{ mr: 1 }} />
@@ -42,6 +42,9 @@ const Header: FC = () => {
                     <Box sx={{ display: 'flex', gap: 2 }}>
                         <Button color="inherit" sx={{ textTransform: 'none' }} onClick={() => navigate('/')}>
                             Список шаблонов
+                        </Button>
+                        <Button color="inherit" sx={{ textTransform: 'none' }} onClick={() => navigate('/constructor')}>
+                            Конструктор шаблонов
                         </Button>
                         <Button
                             variant="contained"
@@ -74,6 +77,11 @@ const Header: FC = () => {
                                 navigate('/');
                             }}
                             >Список шаблонов</MenuItem>
+                            <MenuItem onClick={() => {
+                                handleMenuClose();
+                                navigate('/constructor');
+                            }}
+                            >Конструктор шаблонов</MenuItem>
                             <MenuItem onClick={handleMenuClose}>Регистрация</MenuItem>
                         </Menu>
                     </>
