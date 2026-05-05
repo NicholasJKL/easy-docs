@@ -47,7 +47,7 @@ const schema = yup.object({
     }),
     studentName: yup.string().required(),
     phoneNumber: yup.string().matches(/^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/, "Некорректный номер телефона").required(),
-    group: yup.string().matches(/^[A-Z]{3}-\d{2}-\d{2}$/, "Некорректное значение").required(),
+    group: yup.string().matches(/^[А-Я]{3}-\d{2}-\d{2}$/, "Некорректное значение").required(),
     course: yup.string().oneOf(staticData.courseValues, "Некорректное значение").required(),
     fieldOfStudy: yup.string().oneOf(staticData.fieldOfStudyValues, "Некорректное значение").required(),
     cafedra: yup.string().oneOf(staticData.cafedraValues, "Некорректное значение").required(),
@@ -62,9 +62,9 @@ const schema = yup.object({
     orgKPP: yup.string().default("").optional().matches(/^(|\d{9})$/, "КПП - 9 цифр"),
     orgPhoneNumber: yup.string().matches(/^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/, "Некорректный номер телефона").required(),
     orgEmail: yup.string().email().required(),
-    directorPost: yup.string().oneOf(staticData.directorPostValues).required(),
+    directorPost: yup.string().oneOf(staticData.directorPostValues, "Некорректное значение").required(),
     directorName: yup.string().required(),
-    directorBase: yup.string().oneOf(staticData.directorBaseValues).required(),
+    directorBase: yup.string().oneOf(staticData.directorBaseValues, "Некорректное значение").required(),
     orgManagerName: yup.string().required(),
     orgManagerPost: yup.string().required()
 });
@@ -135,7 +135,7 @@ const TemplateFill: FC = () => {
 
     const { control, handleSubmit, formState: { errors } } = useForm<any>({
         resolver: yupResolver(schema),
-        defaultValues: validMock
+        defaultValues: defaultValues
     });
 
     const onSubmit = async (data: FormData) => {
@@ -159,7 +159,7 @@ const TemplateFill: FC = () => {
             const blob = await response.blob();
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            const filename = 'document.docx';
+            const filename = 'Заявка на практику МГТУ Станкин.docx';
 
             a.href = url;
             a.download = filename;
@@ -180,7 +180,7 @@ const TemplateFill: FC = () => {
             <Paper elevation={0} sx={{ p: { xs: 2, md: 3 } }}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Stack spacing={3}>
-                        <Typography variant="h4">Документ на практику "СТАНКИН"</Typography>
+                        <Typography variant="h4">Документ на практику МГТУ "Станкин"</Typography>
 
                         <ValueSelector name='practiceType' control={control} label='Вид практики' values={staticData.practiceTypeValues}></ValueSelector>
                         <DateCalendar name='dateStart' control={control} label='Дата начала практики' minDate={dayjs('2025-01-01')} maxDate={dayjs('2026-12-31')}></DateCalendar>

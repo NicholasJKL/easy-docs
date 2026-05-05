@@ -95,7 +95,7 @@ const TemplateFill: FC = () => {
             const blob = await response.blob();
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            const filename = 'document.docx';
+            const filename = `${template?.name}.docx`;
 
             a.href = url;
             a.download = filename;
