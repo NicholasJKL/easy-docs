@@ -94,11 +94,11 @@ const TemplateList: FC = () => {
             </Box>
 
             <Grid container spacing={3}>
-                <Grid size={4}>
-                    <TemplateListItem key={0} onClick={() => navigate('/template/practice')} />
+                <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                    <TemplateListItem key={0} onClick={() => navigate('/template')} />
                 </Grid>
                 {templates.map((template) => (
-                    <Grid size={4} key={template.id}>
+                    <Grid size={{ xs: 12, sm: 6, md: 4 }} key={template.id}>
                         <TemplateListItem
                             title={template.name}
                             description={template.description ?? ""}

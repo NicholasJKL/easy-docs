@@ -13,7 +13,7 @@ class TemplateRepository {
     async getTemplateFileById(id: number): Promise<Buffer> {
 
         if (id == 0) {
-            return fs.readFileSync('2.docx');
+            return fs.readFileSync('t2.docx');
         }
 
         const query = `

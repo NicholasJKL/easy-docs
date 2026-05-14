@@ -7,7 +7,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 import Header from './components/Header';
 import TemplateList from './pages/TemplateList';
-import Practice from './pages/TemplateFill/PracticeTemplate';
+import T2Template from './pages/TemplateFill/T2Template';
 import TemplateFill from './pages/TemplateFill';
 import TemplateConstructor from './pages/TemplateConstructor';
 
@@ -35,7 +35,7 @@ function App() {
                         <Route path="/" element={<TemplateList />} />
                         <Route path="/constructor" element={<TemplateConstructor />} />
                         <Route path="/template/:id" element={<TemplateFill />} />
-                        <Route path="/template/practice" element={<Practice />} />
+                        <Route path="/template/" element={<T2Template />} />
                     </Routes>
                 </main>
             </LocalizationProvider>

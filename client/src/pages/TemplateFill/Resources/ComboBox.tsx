@@ -29,6 +29,7 @@ const ComboBox = <T extends FieldValues>({
                     field.onChange(newValue ?? '');
                 }}
                 fullWidth
+                
                 renderInput={(params) => (
                     <TextField
                         {...params}
