@@ -1,12 +1,12 @@
 type Template = {
     id: number;
-    author_id: number | null;
+    author_id?: number | null;
     name: string;
     description: string | null;
-    fields: any;               // JSONB
-    static_data: any;          // JSONB
-    validation_scheme: any;    // JSONB
-    file: Buffer;              // BYTEA
+    fields: string;
+    static_data: string;
+    validation_schema: string;
+    file: Buffer;
 }
 
 export default Template;

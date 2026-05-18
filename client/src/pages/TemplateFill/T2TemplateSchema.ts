@@ -41,8 +41,8 @@ const defaultSchema = yup.object({
         'required-if-lngdegr1',
         'Заполните название языка, если указана степень знания',
         function (value) {
-            const { lngdegr2 } = this.parent;
-            if (lngdegr2 && lngdegr2 !== '' && (!value || value === '')) {
+            const { lngdegr1 } = this.parent;
+            if (lngdegr1 && lngdegr1 !== '' && (!value || value === '')) {
                 return false;
             }
             return true;

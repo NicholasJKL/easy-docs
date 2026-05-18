@@ -35,7 +35,7 @@ function App() {
                         <Route path="/" element={<TemplateList />} />
                         <Route path="/constructor" element={<TemplateConstructor />} />
                         <Route path="/template/:id" element={<TemplateFill />} />
-                        <Route path="/template/" element={<T2Template />} />
+                        <Route path="/template" element={<T2Template />} />
                     </Routes>
                 </main>
             </LocalizationProvider>

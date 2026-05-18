@@ -1,20 +1,27 @@
 import { Pool } from 'pg';
 import TemplateSummary from './models/TemplateSummary';
 import Template from './models/Template';
-import fs from 'fs';
 
 class TemplateRepository {
-    private pool: Pool;
+    protected pool: Pool;
 
     constructor(pool: Pool) {
         this.pool = pool;
     }
 
-    async getTemplateFileById(id: number): Promise<Buffer> {
+    async getStaticValue(table: string, key: string): Promise<any> {
 
-        if (id == 0) {
-            return fs.readFileSync('t2.docx');
-        }
+        const query = `
+            SELECT code FROM ${table} WHERE name = $1
+        `;
+        const result = await this.pool.query(query, [key]);
+
+        const value = result.rows[0].code;
+
+        return value;
+    }
+
+    async getTemplateFileById(id: number): Promise<Buffer> {
 
         const query = `
         SELECT file FROM templates WHERE id = $1
@@ -60,7 +67,7 @@ class TemplateRepository {
             template.description ?? null,
             JSON.stringify(template.fields),
             JSON.stringify(template.static_data),
-            JSON.stringify(template.validation_scheme),
+            JSON.stringify(template.validation_schema),
             template.file,
         ];
 

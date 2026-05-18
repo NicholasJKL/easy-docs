@@ -225,7 +225,7 @@ const T2Template: FC = () => {
                             label='Степень знания иностранного языка 2'
                             values={staticData.langDegreeData}>
                         </ComboBox>
-                        <ValueSelector name='educ_full' control={control} label='Образование' values={staticData.educData}></ValueSelector>
+                        <ComboBox name='educ_full' control={control} label='Образование' values={staticData.educData}></ComboBox>
                         <Divider />
                         <SimpleText name='edOrg1' control={control} label='Наименование образовательного учреждения 1'></SimpleText>
                         <SimpleText name='edDocName1' control={control} label='Наименование документа об образовании (квалификации, спец. знаний) 1'></SimpleText>

@@ -1,6 +1,6 @@
 type TemplateFillData = {
     templateId: number;
-    formData: object;
+    formData: Record<string, string>;
 }
 
 export default TemplateFillData;

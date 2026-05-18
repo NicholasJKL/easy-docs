@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { fillTemplate } from './TemplateService';
+import { fillTemplateDocx } from './TemplateService';
 import { Pool } from 'pg';
 
 import TemplateRepository from './TemplateRepository';
@@ -17,9 +17,9 @@ class TemplateController {
 
     async generateDocument(req: Request, res: Response): Promise<void> {
         try {
-            const templateData: TemplateFillData = req.body;
-            const file: Buffer = await this.templateRepository.getTemplateFileById(templateData.templateId);
-            const filledFile: Buffer = await fillTemplate(file, templateData.formData);
+            const templateFormData: TemplateFillData = req.body;
+            const templateData: Template = await this.templateRepository.getTemplateById(templateFormData.templateId);
+            const filledFile: Buffer = await fillTemplateDocx(templateData, templateFormData, this.templateRepository);
 
             res.setHeader('Content-Disposition', 'attachment; filename="document.docx"');
             res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
@@ -92,8 +92,8 @@ class TemplateController {
                 name,
                 description: description || null,
                 fields: parsedFields,
-                static_data: {},
-                validation_scheme: {},
+                static_data: "",
+                validation_schema: "",
                 file: fileBuffer,
                 author_id: null,
             };
